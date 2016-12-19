@@ -182,9 +182,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _utils = __webpack_require__(6);
 
-	var RTL = (($('html').css('direction') == 'rtl') ? true : false);
-
-	var direction = (RTL ? 'right' : 'left');
 
 	var Cropit = (function () {
 	  function Cropit(jQuery, element, options) {
@@ -202,6 +199,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    key: 'init',
 	    value: function init() {
 	      var _this = this;
+
+	      this.RTL = (
+	      		($('html').css('direction') == 'rtl') ? true : 
+	      		(
+	      			($('body').css('direction') == 'rtl') ? true : 
+	      			(
+	      				(this.$el.css('direction') == 'rtl') ? true : false
+	      			)
+	      		)
+	      	);
+
+	      this.direction = (this.RTL ? 'right' : 'left');
 
 	      this.image = new Image();
 	      this.preImage = new Image();
@@ -221,12 +230,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	      };
 
 	      this.$image = (0, _jquery2['default'])('<img />').addClass(_constants.CLASS_NAMES.PREVIEW_IMAGE).attr('alt', '').css({
-	        transformOrigin: 'top '+direction,
-	        webkitTransformOrigin: 'top '+direction,
+	        transformOrigin: 'top '+this.direction,
+	        webkitTransformOrigin: 'top '+this.direction,
 	        willChange: 'transform'
 	      });
 
-	      if (RTL) {
+	      if (this.RTL) {
 	      	this.$imageContainer = (0, _jquery2['default'])('<div />').addClass(_constants.CLASS_NAMES.PREVIEW_IMAGE_CONTAINER).css({
 	      	  position: 'absolute',
 	      	  overflow: 'hidden',
@@ -258,13 +267,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	          });
 	        }
 
-	        if (RTL) {
+	        if (this.RTL) {
 	        	this.$bg = (0, _jquery2['default'])('<img />').addClass(_constants.CLASS_NAMES.PREVIEW_BACKGROUND).attr('alt', '').css({
 	        	  position: 'relative',
 	        	  right: this.bgBorderWidthArray[3],
 	        	  top: this.bgBorderWidthArray[0],
-	        	  transformOrigin: 'top '+direction,
-	        	  webkitTransformOrigin: 'top '+direction,
+	        	  transformOrigin: 'top '+this.direction,
+	        	  webkitTransformOrigin: 'top '+this.direction,
 	        	  willChange: 'transform'
 	        	});
 	        	this.$bgContainer = (0, _jquery2['default'])('<div />').addClass(_constants.CLASS_NAMES.PREVIEW_BACKGROUND_CONTAINER).css({
@@ -280,8 +289,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        	  position: 'relative',
 	        	  left: this.bgBorderWidthArray[3],
 	        	  top: this.bgBorderWidthArray[0],
-	        	  transformOrigin: 'top '+direction,
-	        	  webkitTransformOrigin: 'top '+direction,
+	        	  transformOrigin: 'top '+this.direction,
+	        	  webkitTransformOrigin: 'top '+this.direction,
 	        	  willChange: 'transform'
 	        	});
 	        	this.$bgContainer = (0, _jquery2['default'])('<div />').addClass(_constants.CLASS_NAMES.PREVIEW_BACKGROUND_CONTAINER).css({
@@ -548,7 +557,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var ret = { x: offset.x, y: offset.y };
 
 	      if (!this.options.freeMove) {
-	        if (RTL) {
+	        if (this.RTL) {
 	        	// when image width is bigger than preview
 	        	if (this.imageWidth * this.zoom >= this.previewSize.width) {
 	        	  ret.x = Math.max(0, Math.min(ret.x, this.imageWidth * this.zoom - this.previewSize.width));
@@ -582,7 +591,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return;
 	      }
 
-	      if (RTL) {
+	      if (this.RTL) {
 	      	this.offset = {
 	      	  x: (this.imageWidth * this.zoom - this.previewSize.width) / 2,
 	      	  y: (this.previewSize.height - this.imageHeight * this.zoom) / 2
@@ -746,7 +755,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        canvasContext.fillRect(0, 0, canvas.width, canvas.height);
 	      }
 
-	      if (RTL) {
+	      if (this.RTL) {
 	      	var last_rotatedOffset_x = this.rotatedOffset.x + this.previewSize.width - this.image.width * this.zoom;
 	      } else {
 	      	var last_rotatedOffset_x = this.rotatedOffset.x;
@@ -804,7 +813,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      if (this.imageLoaded) {
 	        var oldZoom = this.zoom;
 
-	        if (RTL) {
+	        if (this.RTL) {
 	        	var newX = ((this.previewSize.width / 2 + this.offset.x) * newZoom / oldZoom) - (this.previewSize.width / 2);
 	        } else {
 	        	var newX = this.previewSize.width / 2 - (this.previewSize.width / 2 - this.offset.x) * newZoom / oldZoom;
